@@ -1,0 +1,18 @@
+---
+- name: configure virt7-docker-common-release repo
+  template: src=virt7-docker-common-release.repo
+            dest=/etc/yum.repos.d/vir7-docker-common-release.repo        
+              
+- name: install kubernetes components
+  yum: name="{{ item }}" enablerepo=virt7-docker-common-release state=present
+  with_items:
+    - kubernetes
+    
+- name: kubernetes config
+  template: src=kubernetes/config
+            dest=/etc/kubernetes/config
+            
+- name: disable firewall
+  service: name="{{ item }}" state=stopped enabled=no
+  with_items:
+    - firewalld

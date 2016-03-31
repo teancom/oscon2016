@@ -1,0 +1,19 @@
+---
+- name: install kubernetes master components
+  yum: name="{{ item }}" enablerepo=virt7-docker-common-release state=present
+  with_items:
+    - etcd
+    
+- name: apiserver configuration
+  template: src=kubernetes/apiserver
+            dest=/etc/kubernetes/apiserver
+  notify:
+    - restart kubernetes master
+            
+- name: start kubernetes services
+  service: name="{{ item }}" enabled=yes state=started
+  with_items:
+    - etcd
+    - kube-apiserver
+    - kube-controller-manager
+    - kube-scheduler

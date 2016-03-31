@@ -1,0 +1,2 @@
+---
+ca_cert_path: "/etc/docker/certs.d/registry.{{ cluster_project }}.{{ cluster_domain }}:5000"

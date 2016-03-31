@@ -1,0 +1,7 @@
+cluster/files
+cluster/group_vars
+cluster/terraform.tfstate*
+cluster/terraform.tfvars
+cluster/.project-id
+cluster/site.retry
+cluster/.terraform

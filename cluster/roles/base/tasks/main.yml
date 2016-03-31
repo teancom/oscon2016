@@ -1,0 +1,15 @@
+---
+- name: build hosts file
+  lineinfile: dest=/etc/hosts regexp='.*{{ hostvars[item].name }}$'
+              line="{{ hostvars[item].ipv4_address_private }} {{hostvars[item].name}}"
+              state=present
+  when: hostvars[item].ipv4_address_private is defined
+  with_items: "{{ groups['all'] }}"
+
+- name: trust ca cert
+  copy: src="{{ playbook_dir }}/files/ca.pem" dest=/etc/pki/ca-trust/source/anchors/clusterca.pem
+  register: installcert
+
+- name: update ca certs
+  command: /usr/bin/update-ca-trust
+  when: installcert.changed

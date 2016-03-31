@@ -1,0 +1,3 @@
+---
+doctl_release: 1.0.0
+doctl_url: https://github.com/digitalocean/doctl/releases/download/v{{ doctl_release }}/doctl-{{ doctl_release }}-linux-amd64.tar.gz

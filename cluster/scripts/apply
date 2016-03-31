@@ -1,0 +1,10 @@
+#!/usr/bin/env bash
+
+DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
+PROJECT_ID="${DIR}/../.project-id"
+
+if [[ ! -f $PROJECT_ID ]]; then
+  echo $RANDOM | md5 | cut -c-1-8 > $PROJECT_ID   
+fi 
+
+TF_VAR_project=$(cat $PROJECT_ID) terraform apply

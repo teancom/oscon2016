@@ -1,0 +1,21 @@
+---
+- name: configure kubelet
+  template: src=kubernetes/kubelet
+            dest=/etc/kubernetes/kubelet
+  notify:
+    - restart kubernetes minion
+
+- name: start kubernetes services
+  service: name="{{ item }}" enabled=yes state=started
+  with_items:
+    - kube-proxy
+    - kubelet
+    - docker
+
+- name: create registry cert dir
+  file: path="{{ ca_cert_path }}" state=directory mode=0755
+
+- name: install registry ca.crt
+  copy: src="{{ playbook_dir }}/files/ca.pem" dest="{{ ca_cert_path }}/ca.crt"
+  notify:
+    - restart docker

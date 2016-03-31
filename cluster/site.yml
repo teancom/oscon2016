@@ -1,0 +1,27 @@
+---
+- hosts: all
+  roles:
+    - base
+  become: True
+
+- hosts: master
+  roles:
+    - kubernetes-common
+    - kubernetes-master
+  become: True
+
+- hosts: minion
+  roles:
+    - kubernetes-common
+    - kubernetes-minion
+  become: True
+
+- hosts: registry
+  roles:
+    - registry
+  become: True
+
+- hosts: shell
+  roles:
+    - shell
+  become: True
