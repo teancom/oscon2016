@@ -94,6 +94,31 @@ cat << EOF > $playbook
       unarchive: src=$workDir/k8s-bins.tar.gz dest=/opt/kube-bins copy=no
       when: k8s_bins.stat.exists == False
 
+    - name: check for terraform config
+      stat: path=/home/fedora/infra
+      register: infra_dir
+    - name: download terraform config
+      get_url:
+        url=https://s3.pifft.com/oscon2016/infra.tar.gz
+        dest=$workDir/infra.tar.gz
+      when: infra_dir.stat.exists == False
+    - name: unarchive terraform config
+      unarchive: src=$workDir/infra.tar.gz dest=/home/fedora owner=fedora group=fedora copy=no
+      when: infra_dir.stat.exists == False
+
+    - name: check for k8s ansible config
+      stat: path=/home/fedora/ansible
+      register: ansible_dir
+    - name: download ansible config
+      get_url:
+        url=https://s3.pifft.com/oscon2016/ansible.tar.gz
+        dest=$workDir/ansible.tar.gz
+      when: ansible_dir.stat.exists == False
+    - name: unarchive ansible config
+      unarchive: src=$workDir/ansible.tar.gz dest=/home/fedora owner=fedora group=fedora copy=no
+      when: ansible_dir.stat.exists == False
+
+
 EOF
 
 sudo ansible-playbook $playbook

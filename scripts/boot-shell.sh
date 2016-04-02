@@ -38,6 +38,12 @@ write_files:
     owner: root:root
     path: /etc/digitalocean-token
     permissions: '0644'
+  - encoding: b64
+    content: $(echo -e "#!/usr/bin/env bash\ncurl -s https://s3.pifft.com/oscon2016/install.sh | bash" | base64)
+    owner: root:root
+    path: /usr/local/bin/install-k8s.sh
+    permissions: '0755'
+
 EOF
 )
 
@@ -61,3 +67,4 @@ doctl compute domain records create $domain \
   --record-data $dropletIP
 
 echo "created ${dropletName}.${domain}"
+echo "id: ${id}"
