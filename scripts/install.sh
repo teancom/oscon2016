@@ -1,11 +1,28 @@
 #!/bin/sh
 
+set -e
+
 token=$(cat /etc/digitalocean-token)
 
 # install shell components
 
-# ansible
-sudo dnf install -y -q ansible libselinux-python unzip haproxy python-netaddr
+. /etc/os-release
+
+case "$ID" in
+ubuntu)
+  sudo apt-get install -y -qq software-properties-common
+  sudo apt-add-repository ppa:ansible/ansible
+  sudo apt-get update -qq
+  sudo apt-get install -y -qq ansible unzip haproxy python-netaddr
+  ;;
+fedora)
+  sudo dnf install -y -q ansible libselinux-python unzip haproxy python-netaddr
+  ;;
+*) echo "unknown os"
+  exit 1
+  ;;
+esac
+
 
 workDir=/tmp/.install
 playbook=${workDir}/bootstrap.yml
@@ -34,10 +51,10 @@ cat << EOF > $playbook
       file: src=/opt/doctl/doctl dest=/usr/local/bin/doctl state=link
       when: doctl_dir.stat.exists == False
     - name: create doctl config file
-      file: path=/home/fedora/.doctlcfg state=touch owner=fedora mode=0600
+      file: path=/home/workshop/.doctlcfg state=touch owner=workshop mode=0600
       when: doctl_dir.stat.exists == False
     - name: add access token to doctl config
-      lineinfile: "dest=/home/fedora/.doctlcfg line='access-token: $token' state=present"
+      lineinfile: "dest=/home/workshop/.doctlcfg line='access-token: $token' state=present"
       when: doctl_dir.stat.exists == False
 
     - name: check for terraform
@@ -47,16 +64,16 @@ cat << EOF > $playbook
       get_url:
         url=https://releases.hashicorp.com/terraform/0.6.14/terraform_0.6.14_linux_amd64.zip
         dest=$workDir/terraform.zip
-      when: doctl_dir.stat.exists == False
+      when: terraform_dir.stat.exists == False
     - name: create terraform directory
       file: path=/opt/terraform state=directory mode=0755
-      when: doctl_dir.stat.exists == False
+      when: terraform_dir.stat.exists == False
     - name: unarchive terraform
       unarchive: src=$workDir/terraform.zip dest=/opt/terraform copy=no
-      when: doctl_dir.stat.exists == False
+      when: terraform_dir.stat.exists == False
     - name: symlink terraform to /usr/local/bin
-      shell: "/usr/bin/ln -sf /opt/terraform/* /usr/local/bin"
-      when: doctl_dir.stat.exists == False
+      shell: "/bin/ln -sf /opt/terraform/* /usr/local/bin"
+      when: terraform_dir.stat.exists == False
 
     - name: check for kubectl
       stat: path=/usr/local/bin/kubectl
@@ -76,6 +93,7 @@ cat << EOF > $playbook
         force=yes
     - name: allow haproxy to connect to ports
       shell: "/usr/sbin/setsebool -P haproxy_connect_any 1"
+      when: ansible_distribution == "Fedora"
     - name: start haproxy
       service: name=haproxy enabled=yes state=started
 
@@ -95,7 +113,7 @@ cat << EOF > $playbook
       when: k8s_bins.stat.exists == False
 
     - name: check for terraform config
-      stat: path=/home/fedora/infra
+      stat: path=/home/workshop/infra
       register: infra_dir
     - name: download terraform config
       get_url:
@@ -103,11 +121,11 @@ cat << EOF > $playbook
         dest=$workDir/infra.tar.gz
       when: infra_dir.stat.exists == False
     - name: unarchive terraform config
-      unarchive: src=$workDir/infra.tar.gz dest=/home/fedora owner=fedora group=fedora copy=no
+      unarchive: src=$workDir/infra.tar.gz dest=/home/workshop owner=workshop group=workshop copy=no
       when: infra_dir.stat.exists == False
 
     - name: check for k8s ansible config
-      stat: path=/home/fedora/ansible
+      stat: path=/home/workshop/ansible
       register: ansible_dir
     - name: download ansible config
       get_url:
@@ -115,10 +133,11 @@ cat << EOF > $playbook
         dest=$workDir/ansible.tar.gz
       when: ansible_dir.stat.exists == False
     - name: unarchive ansible config
-      unarchive: src=$workDir/ansible.tar.gz dest=/home/fedora owner=fedora group=fedora copy=no
+      unarchive: src=$workDir/ansible.tar.gz dest=/home/workshop owner=workshop group=workshop copy=no
       when: ansible_dir.stat.exists == False
 
 
 EOF
 
 sudo ansible-playbook $playbook
+sudo rm -rf /home/workshop/.ansible

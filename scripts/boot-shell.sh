@@ -2,8 +2,9 @@
 
 token=$1
 pubKeyPath=$2
-
 domain="x.pifft.com"
+image="ubuntu-14-04-x64"
+masterKey=104064
 
 if [[ -z $token || -z $pubKeyPath ]]; then
   echo "usage: $0 <token> <pubkey path>"
@@ -22,7 +23,7 @@ userData=$(cat <<EOF
 #cloud-config
 
 users:
-  - name: fedora
+  - name: workshop
     shell: /bin/bash
     sudo: ['ALL=(ALL) NOPASSWD:ALL']
     ssh-authorized-keys:
@@ -54,8 +55,8 @@ doctl compute droplet create $dropletName \
   --user-data "$userData" \
   --region nyc1 \
   --size 4gb \
-  --ssh-keys 104064 \
-  --image fedora-23-x64 \
+  --ssh-keys $masterKey \
+  --image $image \
   --wait
 
 dropletIP=$(doctl compute droplet list $dropletName --no-header --format PublicIPv4)
@@ -68,3 +69,4 @@ doctl compute domain records create $domain \
 
 echo "created ${dropletName}.${domain}"
 echo "id: ${id}"
+echo "doctl compute ssh workshop@${dropletName}"
