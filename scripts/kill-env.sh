@@ -1,8 +1,5 @@
 #!/usr/bin/env bash
 
-set -e
-
-
 id=$1
 
 domain="x.pifft.com"

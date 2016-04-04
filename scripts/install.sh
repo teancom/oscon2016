@@ -1,6 +1,4 @@
-#!/bin/sh
-
-set -e
+#!/usr/bin/env bash
 
 token=$(cat /etc/digitalocean-token)
 
@@ -15,14 +13,12 @@ ubuntu)
   sudo apt-get update -qq
   sudo apt-get install -y -qq ansible unzip haproxy python-netaddr
   ;;
-fedora)
-  sudo dnf install -y -q ansible libselinux-python unzip haproxy python-netaddr
-  ;;
 *) echo "unknown os"
   exit 1
   ;;
 esac
 
+set -e
 
 workDir=/tmp/.install
 playbook=${workDir}/bootstrap.yml
@@ -91,6 +87,8 @@ cat << EOF > $playbook
         dest=/etc/haproxy/haproxy.cfg
         mode=0644
         force=yes
+    - name: enable haproxy service
+      lineinfile: dest=/etc/default/haproxy regexp=^ENABLED= line=ENABLED=1
     - name: allow haproxy to connect to ports
       shell: "/usr/sbin/setsebool -P haproxy_connect_any 1"
       when: ansible_distribution == "Fedora"
@@ -136,6 +134,17 @@ cat << EOF > $playbook
       unarchive: src=$workDir/ansible.tar.gz dest=/home/workshop owner=workshop group=workshop copy=no
       when: ansible_dir.stat.exists == False
 
+    - name: check for kubectl proxy config
+      stat: path=/etc/conf/kubectl-proxy.conf
+      register: kubectl_proxy
+    - name: download kubectl proxy config
+      get_url:
+        url=https://s3.pifft.com/oscon2016/kubectl-proxy.conf
+        dest=/etc/init/kubectl-proxy.conf
+        mode=0644
+      when: kubectl_proxy.stat.exists == False
+    - name: enable kbuectl-proxy
+      service: name=kubectl-proxy enabled=yes
 
 EOF
 
