@@ -1,4 +1,0 @@
-# Workshop Cluster
-
-## Installation
-

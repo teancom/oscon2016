@@ -17,12 +17,12 @@ doctl compute domain records list $domain \
   | awk '{print $1}' \
   | xargs doctl compute domain records delete $domain
 
-# delete droplets
-doctl compute droplet list "*.${id}" --no-header --format ID \
-  | xargs doctl compute droplet rm
-
 # delete keys
 doctl compute ssh-key list \
   | grep "oscon-${id}" \
   | awk '{print $1}' \
   | xargs -I % doctl compute ssh-key delete %
+  
+# delete droplets
+doctl compute droplet list "*.${id}" --no-header --format ID \
+  | xargs doctl compute droplet rm

@@ -42,7 +42,7 @@ write_files:
   - encoding: b64
     content: $(echo -e "#!/usr/bin/env bash\ncurl -s https://s3.pifft.com/oscon2016/install.sh | bash" | base64)
     owner: root:root
-    path: /usr/local/bin/install-k8s.sh
+    path: /usr/local/bin/install-shell.sh
     permissions: '0755'
 package_update: true
 apt_sources:

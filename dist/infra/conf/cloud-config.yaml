@@ -1,0 +1,12 @@
+#cloud-config
+users:
+  - name: ${user}
+    shell: /bin/bash
+    sudo: ['ALL=(ALL) NOPASSWD:ALL']
+    ssh-authorized-keys:
+      - ${public_key}
+package_update: true
+apt_sources:
+  - source: "ppa:gluster/glusterfs-3.5"
+packages:
+  - glusterfs-client

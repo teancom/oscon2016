@@ -1,9 +1,0 @@
----
-- name: restart kubernetes minion
-  service: name="{{ item }}" enabled=yes state=restarted
-  with_items:
-    - kube-proxy
-    - kubelet
-
-- name: restart docker
-  service: name=docker state=restarted
