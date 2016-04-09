@@ -1,22 +1,9 @@
 #!/usr/bin/env bash
 
 token=$(cat /etc/digitalocean-token)
+id=$(cat /etc/project-id)
 
 # install shell components
-
-. /etc/os-release
-
-case "$ID" in
-ubuntu)
-  sudo apt-get install -y -qq software-properties-common
-  sudo apt-add-repository ppa:ansible/ansible
-  sudo apt-get update -qq
-  sudo apt-get install -y -qq ansible unzip haproxy python-netaddr
-  ;;
-*) echo "unknown os"
-  exit 1
-  ;;
-esac
 
 set -e
 
@@ -29,6 +16,13 @@ cat << EOF > $playbook
 - hosts: localhost
   connection: local
   tasks:
+    - name: install required packages
+      apt: name="{{ item }}" state=present update_cache=yes cache_valid_time=3600
+      with_items:
+        - unzip
+        - haproxy
+        - python-netaddr
+
     - name: check for doctl
       stat: path=/opt/doctl
       register: doctl_dir
