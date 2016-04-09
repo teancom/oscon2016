@@ -44,6 +44,15 @@ write_files:
     owner: root:root
     path: /usr/local/bin/install-k8s.sh
     permissions: '0755'
+package_update: true
+apt_sources:
+  - source: "ppa:gluster/glusterfs-3.5"
+  - source: "ppa:ansible/ansible"
+packages:
+  - glusterfs-client
+  - glusterfs-server
+  - ansible
+
 
 EOF
 )
