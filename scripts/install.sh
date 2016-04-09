@@ -146,6 +146,16 @@ cat << EOF > $playbook
     - name: enable kbuectl-proxy
       service: name=kubectl-proxy enabled=yes
 
+    - name: add default search domain
+      lineinfile: dest=/etc/resolvconf/resolv.conf.d/base line="domain ${id}.x.pifft.com" state=present
+      notify: update resolvconf
+
+    - file: path=/home/workshop/.shell-configured mode=0600 state=touch owner=workshop group=workshop
+
+  handlers:
+    - name: update resolvconf
+      command: resolvconf -u
+
 EOF
 
 sudo ansible-playbook $playbook
