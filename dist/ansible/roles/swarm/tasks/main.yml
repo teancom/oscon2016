@@ -28,3 +28,14 @@
     state: reloaded
     restart_policy: on-failure
   when: inventory_hostname_short != "swarm-1"
+
+- name: run registrator
+  docker:
+    name: registrator
+    image: gliderlabs/registrator:latest
+    command: "{{ consul_address }}"
+    state: reloaded
+    restart_policy: on-failure
+    hostname: "{{ ansible_default_ipv4.address }}"
+    volumes:
+      - "/var/run/docker.sock:/tmp/docker.sock"
