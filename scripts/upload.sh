@@ -8,10 +8,12 @@ dest=${server}/oscon2016
 cd dist
 mc cp scripts/* $dest
 
-tar czf infra.tar.gz infra
-mc cp infra.tar.gz $dest
-rm infra.tar.gz 
+dir=$(mktemp -d)
 
-tar czf ansible.tar.gz ansible
-mc cp ansible.tar.gz $dest
-rm ansible.tar.gz 
+for i in infra ansible deploy; do
+  archive=$dir/$i.tar.gz
+  tar czf $archive $i
+  mc cp $archive $dest
+done
+
+rm -rf $dir

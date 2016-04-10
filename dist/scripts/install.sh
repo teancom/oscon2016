@@ -125,6 +125,17 @@ cat << EOF > $playbook
     - name: unarchive ansible config
       unarchive: src=$workDir/ansible.tar.gz dest=/home/${user} owner=${user} group=${group} copy=no
 
+    - name: check for deploy config
+      stat: path=/home/${user}/deploy
+    - name: download deploy config
+      get_url:
+        url=https://s3.pifft.com/oscon2016/deploy.tar.gz
+        dest=$workDir/deploy.tar.gz
+        force=yes
+    - name: unarchive deploy config
+      unarchive: src=$workDir/deploy.tar.gz dest=/home/${user} owner=${user} group=${group} copy=no
+
+
     - name: add default search domain
       lineinfile: dest=/etc/resolvconf/resolv.conf.d/base line="domain ${id}.x.pifft.com" state=present
       notify: update resolvconf

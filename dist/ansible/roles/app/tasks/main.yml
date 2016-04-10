@@ -17,6 +17,8 @@
        bare=yes
   become: true
   become_user: git
+  tags:
+    - git
 
 - name: jenkins container
   docker:

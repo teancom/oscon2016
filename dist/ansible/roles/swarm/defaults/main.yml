@@ -6,3 +6,5 @@ manager_address: "{{ hostvars[manager_host].ansible_default_ipv4.address }}:2375
 consul_address: "consul://{{ hostvars[app_host].ansible_default_ipv4.address }}:8500"
 
 docker_opts: "-H tcp://0.0.0.0:2375 -H unix:///var/run/docker.sock --cluster-store={{ consul_address }} --cluster-advertise=eth0:2375"
+
+ca_cert_path: "/etc/docker/certs.d/{{ app_host }}:5000"

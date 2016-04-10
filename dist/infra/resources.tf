@@ -74,6 +74,10 @@ resource "null_resource" "ca" {
   }
 
   provisioner "local-exec" {
+    command = "sudo mkdir /usr/share/ca-certificates/extra"
+  }
+
+  provisioner "local-exec" {
     command = "echo '${module.ca.ca_pem}' > files/ca.pem"
   }
 
@@ -84,4 +88,14 @@ resource "null_resource" "ca" {
   provisioner "local-exec" {
     command = "echo '${module.ca.registry_key_pem}' > files/registry_key.pem"
   }
+
+  provisioner "local-exec" {
+    command = "sudo cp files/ca.pem /usr/share/ca-certificates/extra/workshop.pem"
+  }
+
+  provisioner "local-exec" {
+    command = "sudo dpkg-reconfigure ca-certificates"
+  }
+
+
 }

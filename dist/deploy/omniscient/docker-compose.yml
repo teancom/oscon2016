@@ -1,0 +1,34 @@
+---
+version: '2'
+
+services:
+  web:
+    image: 'app.e049b6ef.x.pifft.com:5000/workshop/omniscient:latest'
+    ports:
+      - "8080"
+    environment:
+      - OMNISCIENT_REDIS_ADDR="redis:6379"
+      - OMNISCIENT_HTTP_ADDR=":8080"
+    depends_on:
+      - redis
+    networks:
+      - back-end
+
+  redis:
+    image: redis
+    ports:
+      - "6379"
+    container_name: redis
+    command: redis-server --appendonly yes
+    volumes:
+      - redis-data:/data
+    networks:
+      - back-end
+
+volumes:
+  redis-data:
+    driver: local
+
+networks:
+  back-end:
+    driver: overlay

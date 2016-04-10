@@ -9,6 +9,16 @@
   notify:
     - restart docker
 
+- name: set up registry ca certs path
+  file: path="{{ ca_cert_path }}" state=directory mode=0755
+
+- name: install registry ca certs
+  copy:
+    src="/home/workshop/infra/files/ca.pem"
+    dest="{{ ca_cert_path }}/ca.crt"
+  notify:
+    - restart docker
+
 - name: run swarm manager
   docker:
     name: swarm-manager
@@ -35,7 +45,7 @@
     image: gliderlabs/registrator:latest
     command: "{{ consul_address }}"
     state: reloaded
+    net: host
     restart_policy: on-failure
-    hostname: "{{ ansible_default_ipv4.address }}"
     volumes:
       - "/var/run/docker.sock:/tmp/docker.sock"

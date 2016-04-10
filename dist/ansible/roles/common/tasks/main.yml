@@ -22,3 +22,6 @@
 
 - name: install docker-py
   pip: name=docker-py state=latest
+
+- name: disable huge pages
+  shell: echo never > /sys/kernel/mm/transparent_hugepage/enabled
