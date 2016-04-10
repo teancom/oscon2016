@@ -1,0 +1,17 @@
+---
+- name: create jenkins_home
+  file: name=/var/jenkins_home state=directory mode=0755 owner=workshop group=workshop
+
+- name: jenkins container
+  docker:
+    name: jenkins
+    image: "bryanl/jenkins-oscon2016"
+    pull: always
+    state: reloaded
+    volumes:
+      - "/var/jenkins_home:/var/jenkins_home"
+      - "/var/run/docker.sock:/var/run/docker.sock"
+    ports:
+      - "8080:8080"
+      - "50000:50000"
+

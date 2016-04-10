@@ -26,6 +26,7 @@ cat << EOF > $playbook
         - unzip
         - haproxy
         - python-netaddr
+        - git
 
     - name: check for doctl
       stat: path=/opt/doctl
