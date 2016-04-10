@@ -9,6 +9,7 @@ group=workshop
 
 doctlVer="1.0.1"
 tfVer="0.6.14"
+dcVer="1.7.0-rc1"
 
 # install shell components
 
@@ -63,6 +64,18 @@ cat << EOF > $playbook
     - name: add access token to doctl config
       lineinfile: "dest=/home/${user}/.doctlcfg line='access-token: $token' state=present"
       when: doctl_dir.stat.exists == False
+
+    - name: check for docker compose
+      stat: path=/usr/local/bin/docker-compose
+      register: dc_bin
+    - name: download docker compose
+      get_url:
+        url: https://github.com/docker/compose/releases/download/${dcVer}/docker-compose-Linux-x86_64
+        dest: /usr/local/bin/docker-compose
+        owner: root
+        group: root
+        mode: 0755
+      when: dc_bin.stat.exists == False
 
     - name: check for jenkins cli script
       stat: path=/usr/local/bin/jenkins-cli.sh
