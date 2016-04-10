@@ -30,4 +30,5 @@ EOF
   echo "${tfVars}" > terraform.tfvars
 fi
 
+terraform get
 terraform apply

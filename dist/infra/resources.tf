@@ -1,3 +1,9 @@
+module "ca" {
+  source = "./ca"
+
+  registry_cn = "app.${var.project}.${var.domain}"
+}
+
 resource "digitalocean_droplet" "app" {
   image = "${var.image}"
   name = "app.${var.project}"
@@ -59,5 +65,23 @@ resource "template_file" "user_data" {
     public_key = "${var.public_key}"
     user = "${var.user}"
 
+  }
+}
+
+resource "null_resource" "ca" {
+  provisioner "local-exec" {
+    command = "mkdir -p files"
+  }
+
+  provisioner "local-exec" {
+    command = "echo '${module.ca.ca_pem}' > files/ca.pem"
+  }
+
+  provisioner "local-exec" {
+    command = "echo '${module.ca.registry_pem}' > files/registry.pem"
+  }
+
+  provisioner "local-exec" {
+    command = "echo '${module.ca.registry_key_pem}' > files/registry_key.pem"
   }
 }

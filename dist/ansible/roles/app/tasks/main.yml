@@ -31,3 +31,41 @@
       - "8080:8080"
       - "50000:50000"
 
+- name: create registry cert dir
+  file: path="{{ ca_cert_path }}" state=directory mode=0755
+
+- name: install registry ca.crt
+  copy: src="{{ infra_dir }}/files/ca.pem" dest="{{ ca_cert_path }}/ca.crt"
+  notify:
+    - restart docker
+
+- name: create registry directories
+  file: path="{{ item }}" state=directory mode=0755
+  with_items:
+    - /var/lib/registry/data
+    - /var/lib/registry/certs
+
+- name: copy TLS files
+  copy: src="{{ infra_dir }}/files/{{ item }}" dest="/var/lib/registry/certs/{{ item }}"
+  with_items:
+    - ca.pem
+    - registry.pem
+    - registry_key.pem
+
+- name: set registry key security
+  file: path=/var/lib/registry/certs/registry_key.pem mode=0600
+
+- name: create registry container
+  docker:
+    name: registry
+    image: registry:2
+    state: reloaded
+    restart_policy: on-failure
+    ports:
+      - "5000:5000"
+    volumes:
+      - "/var/lib/registry/data:/var/lib/registry"
+      - "/var/lib/registry/certs:/certs"
+    env:
+      REGISTRY_HTTP_TLS_CERTIFICATE: /certs/registry.pem
+      REGISTRY_HTTP_TLS_KEY: /certs/registry_key.pem
