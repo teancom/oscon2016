@@ -9,3 +9,9 @@
   become_user: root
   roles:
     - app
+
+- hosts: swarms
+  become: true
+  become_user: root
+  roles:
+    - swarm

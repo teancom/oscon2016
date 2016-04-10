@@ -69,3 +69,12 @@
     env:
       REGISTRY_HTTP_TLS_CERTIFICATE: /certs/registry.pem
       REGISTRY_HTTP_TLS_KEY: /certs/registry_key.pem
+
+- name: create consul container
+  docker:
+    name: consul
+    image: progrium/consul
+    command: -server -bootstrap
+    state: started
+    ports:
+      - "8500:8500"

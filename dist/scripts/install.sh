@@ -20,6 +20,14 @@ cat << EOF > $playbook
 - hosts: localhost
   connection: local
   tasks:
+    - name: install docker repo keys
+      apt_key: keyserver=hkp://p80.pool.sks-keyservers.net:80 id=58118E89F3A912897C070ADBF76221572C52609D
+    - name: create docker repo
+      apt_repository: repo='deb https://apt.dockerproject.org/repo ubuntu-trusty main' state=present
+    - name: create docker group
+      group: name=docker state=present
+    - name: add workshop user to docker group
+      user: name=workshop groups='docker'
     - name: install required packages
       apt: name="{{ item }}" state=present update_cache=yes cache_valid_time=3600
       with_items:
@@ -28,6 +36,9 @@ cat << EOF > $playbook
         - python-netaddr
         - git
         - default-jre
+        - docker-engine
+        - "linux-image-extra-{{ hostvars[inventory_hostname]['ansible_kernel'] }}"
+        - python-pip
 
     - name: check for doctl
       stat: path=/opt/doctl

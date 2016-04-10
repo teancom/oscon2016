@@ -1,0 +1,4 @@
+---
+app_host: "app.{{ project_id }}.{{ project_domain }}"
+member_address: "{{ ansible_default_ipv4.address }}:2375"
+consul_address: "consul://{{ hostvars[app_host].ansible_default_ipv4.address }}:8500"

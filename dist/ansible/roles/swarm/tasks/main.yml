@@ -1,0 +1,31 @@
+---
+
+- name: configure docker listening ports
+  lineinfile:
+    dest=/etc/default/docker
+    regexp=^#DOCKER_OPTS
+    line='DOCKER_OPTS="-H tcp://0.0.0.0:2375 -H unix:///var/run/docker.sock"'
+    backrefs=yes
+  notify:
+    - restart docker
+  when: inventory_hostname_short != "swarm-1"
+
+- name: run swarm manager
+  docker:
+    name: swarm-manager
+    image: swarm
+    command: manage --advertise={{ member_address}} {{ consul_address }}
+    state: reloaded
+    restart_policy: on-failure
+    ports:
+      - "2375:2375"
+  when: inventory_hostname_short == "swarm-1"
+
+- name: run swarm member
+  docker:
+    name: swarm-member
+    image: swarm
+    command: join --advertise={{ member_address}} {{ consul_address }}
+    state: reloaded
+    restart_policy: on-failure
+  when: inventory_hostname_short != "swarm-1"
