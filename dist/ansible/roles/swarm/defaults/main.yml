@@ -1,4 +1,8 @@
 ---
 app_host: "app.{{ project_id }}.{{ project_domain }}"
+manager_host: "swarm-1.{{ project_id }}.{{ project_domain }}"
 member_address: "{{ ansible_default_ipv4.address }}:2375"
+manager_address: "{{ hostvars[manager_host].ansible_default_ipv4.address }}:2375"
 consul_address: "consul://{{ hostvars[app_host].ansible_default_ipv4.address }}:8500"
+
+docker_opts: "-H tcp://0.0.0.0:2375 -H unix:///var/run/docker.sock --cluster-store={{ consul_address }} --cluster-advertise=eth0:2375"
