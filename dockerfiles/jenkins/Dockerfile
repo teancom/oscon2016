@@ -10,6 +10,13 @@ RUN apt-get update \
       && rm -rf /var/lib/apt/lists/*
 RUN echo "jenkins ALL=NOPASSWD: ALL" >> /etc/sudoers
 
+RUN wget -q https://storage.googleapis.com/golang/go1.6.linux-amd64.tar.gz
+RUN tar -C /usr/local -xzf go1.6.linux-amd64.tar.gz \
+      && rm go1.6.linux-amd64.tar.gz
+
 USER jenkins
+ENV PATH /usr/local/go/bin:$PATH
 COPY plugins.txt /usr/share/jenkins/plugins.txt
+COPY go.sh /etc/profile.d
+COPY gitconfig /var/jenkins_home/.gitconfig
 RUN /usr/local/bin/plugins.sh /usr/share/jenkins/plugins.txt

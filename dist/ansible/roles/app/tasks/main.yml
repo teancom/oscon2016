@@ -1,6 +1,22 @@
 ---
+- name: create git user
+  user: name=git
+
+- name: create git ssh directory
+  file: name=/home/git/.ssh state=directory owner=git group=git mode=0700
+
+- name: create authorized_keys
+  copy: src=/home/workshop/.ssh/id_rsa.pub dest=/home/git/.ssh/authorized_keys owner=git group=git mode=0644
+
 - name: create jenkins_home
   file: name=/var/jenkins_home state=directory mode=0755 owner=workshop group=workshop
+
+- name: create omniscient repo
+  git: repo=https://github.com/bryanl/omniscient.git
+       dest=/home/git/omniscient.git
+       bare=yes
+  become: true
+  become_user: git
 
 - name: jenkins container
   docker:

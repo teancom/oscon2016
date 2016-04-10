@@ -27,6 +27,7 @@ cat << EOF > $playbook
         - haproxy
         - python-netaddr
         - git
+        - default-jre
 
     - name: check for doctl
       stat: path=/opt/doctl
@@ -52,6 +53,16 @@ cat << EOF > $playbook
       lineinfile: "dest=/home/${user}/.doctlcfg line='access-token: $token' state=present"
       when: doctl_dir.stat.exists == False
 
+    - name: check for jenkins cli script
+      stat: path=/usr/local/bin/jenkins-cli.sh
+      register: jenkins_bin
+    - name: download jenkins cli
+      get_url:
+        url=https://s3.pifft.com/oscon2016/jenkins-cli.sh
+        dest=/usr/local/bin/jenkins-cli.sh
+        mode=0755
+      when: jenkins_bin.stat.exists == False
+
     - name: check for terraform
       stat: path=/opt/terraform
       register: terraform_dir
@@ -72,35 +83,32 @@ cat << EOF > $playbook
 
     - name: check for terraform config
       stat: path=/home/${user}/infra
-      register: infra_dir
     - name: download terraform config
       get_url:
         url=https://s3.pifft.com/oscon2016/infra.tar.gz
         dest=$workDir/infra.tar.gz
         force=yes
-      when: infra_dir.stat.exists == False
     - name: unarchive terraform config
       unarchive: src=$workDir/infra.tar.gz dest=/home/${user} owner=${user} group=${group} copy=no
-      when: infra_dir.stat.exists == False
 
     - name: check for ansible config
       stat: path=/home/${user}/ansible
-      register: ansible_dir
     - name: download ansible config
       get_url:
         url=https://s3.pifft.com/oscon2016/ansible.tar.gz
         dest=$workDir/ansible.tar.gz
         force=yes
-      when: ansible_dir.stat.exists == False
     - name: unarchive ansible config
       unarchive: src=$workDir/ansible.tar.gz dest=/home/${user} owner=${user} group=${group} copy=no
-      when: ansible_dir.stat.exists == False
 
     - name: add default search domain
       lineinfile: dest=/etc/resolvconf/resolv.conf.d/base line="domain ${id}.x.pifft.com" state=present
       notify: update resolvconf
 
     - file: path=/home/${user}/.shell-configured mode=0600 state=touch owner=${user} group=${group}
+
+    - name: add git lol alias
+      command: git config --global alias.lol "log --all --graph --pretty=format:'%Cred%h%Creset -%C(auto)%d%Creset %s %Cgreen(%cr) %C(bold blue)<%an>%Creset' --abbrev-commit --date=relative"
 
   handlers:
     - name: update resolvconf
