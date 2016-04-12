@@ -12,16 +12,3 @@ Logging details a large part of how your application is working, but what are me
 
 Finally, we’ll discuss potential requirements for modern applications and how they can best fit in modern cloud infrastructures.
 
-## Installation
-
-## Outline
-
-### Continuous Integration
-
-### Continuous Deployment
-
-### Logs
-
-### Metrics
-
-## Tips
