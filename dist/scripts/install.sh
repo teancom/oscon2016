@@ -6,6 +6,7 @@ workDir=/tmp/.install
 playbook=${workDir}/bootstrap.yml
 user=workshop
 group=workshop
+webHookURL="https://devconfbot.ngrok.io/webhook"
 
 doctlVer="1.0.1"
 tfVer="0.6.14"
@@ -155,6 +156,6 @@ sudo ansible-playbook $playbook
 sudo rm -rf /home/${user}/.ansible
 sudo rm -rf /tmp/.install
 
-curl -X "POST" "https://devconfbot.ngrok.io/webhook" \
+curl -X "POST" $webHookURL \
   -H "Content-Type: application/json" \
   -d "{\"type\": \"install_complete\", \"project_id\": \"bc15203\"}"
