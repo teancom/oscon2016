@@ -158,4 +158,4 @@ sudo rm -rf /tmp/.install
 
 curl -X "POST" $webHookURL \
   -H "Content-Type: application/json" \
-  -d "{\"type\": \"install_complete\", \"project_id\": \"bc15203\"}"
+  -d "{\"type\": \"install_complete\", \"project_id\": \"$id\"}"
