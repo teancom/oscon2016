@@ -78,6 +78,30 @@
     ports:
       - "3000:3000"
 
+- name: create elasticsearch directories
+  file:
+    path="/home/workshop/elasticsearch/{{ item }}"
+    state=directory mode=0755
+  become: true
+  become_user: workshop
+  with_items:
+    - log
+    - data
+
+- name: elasticsearch container
+  docker:
+    name: elasticsearch
+    image: elasticsearch
+    command:
+    pull: always
+    state: reloaded
+    volumes:
+      - "/home/workshop/elasticsearch:/usr/share/elasticsearch/data"
+    ports:
+      - "9200:9200"
+      - "9300:9300"
+
+
 - name: create registry cert dir
   file:
     path="{{ ca_cert_path }}"
