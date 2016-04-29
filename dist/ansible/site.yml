@@ -29,3 +29,4 @@
     consul_join_at_start: true
   roles:
     - savagegus.consul
+    - node_exporter

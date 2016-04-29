@@ -38,6 +38,8 @@
         - docker-engine
         - "linux-image-extra-{{ hostvars[inventory_hostname]['ansible_kernel'] }}"
         - python-pip
+    - name: install docker-py
+      pip: name=docker-py state=latest
 
     - name: check for doctl
       stat: path=/opt/doctl
