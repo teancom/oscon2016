@@ -7,6 +7,7 @@ dest=${server}/oscon2016
 
 cd dist
 mc cp scripts/* $dest
+mc cp static/* $dest
 
 dir=$(mktemp -d)
 
