@@ -60,6 +60,24 @@
     ports:
       - "9090:9090"
 
+- name: create grafana directory
+  file:
+    path="/home/workshop/grafana_db"
+    state=directory mode=0755
+  become: true
+  become_user: workshop
+
+- name: grafana container
+  docker:
+    name: grafana
+    image: grafana/grafana
+    pull: always
+    state: reloaded
+    volumes:
+      - "/home/workshop/grafana_db:/var/lib/grafana"
+    ports:
+      - "3000:3000"
+
 - name: create registry cert dir
   file:
     path="{{ ca_cert_path }}"
