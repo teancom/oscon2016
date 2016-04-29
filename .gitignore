@@ -5,3 +5,4 @@ cluster/terraform.tfvars
 cluster/.project-id
 cluster/site.retry
 cluster/.terraform
+dist/ansible/.cache

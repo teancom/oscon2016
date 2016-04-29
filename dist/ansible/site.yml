@@ -1,4 +1,4 @@
-- hosts: all
+- hosts: apps:swarms
   become: true
   become_user: root
   roles:
@@ -15,3 +15,17 @@
   become_user: root
   roles:
     - swarm
+
+- hosts: apps:swarms:shells
+  become: true
+  become_user: root
+  vars:
+    consul_is_ui: true
+    consul_is_server: true
+    consul_datacenter: "{{ project_id }}"
+    consul_bootstrap: "true"
+    consul_bind_address: "{{ ansible_default_ipv4['address'] }}"
+    consul_encrypt: "X3zHsi7UKx1oufq9h51tTw=="
+    consul_join_at_start: true
+  roles:
+    - savagegus.consul

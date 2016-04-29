@@ -10,6 +10,9 @@ app.${id}.x.pifft.com
 
 [swarms]
 swarm-[1:3].${id}.x.pifft.com
+
+[shells]
+shell.${id}.x.pifft.com
 EOF
 
 projectVars=/home/workshop/ansible/project.yml

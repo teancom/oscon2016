@@ -34,21 +34,29 @@
       - "50000:50000"
 
 - name: create registry cert dir
-  file: path="{{ ca_cert_path }}" state=directory mode=0755
+  file:
+    path="{{ ca_cert_path }}"
+    state=directory mode=0755
 
 - name: install registry ca.crt
-  copy: src="{{ infra_dir }}/files/ca.pem" dest="{{ ca_cert_path }}/ca.crt"
+  copy:
+    src="{{ infra_dir }}/files/ca.pem"
+    dest="{{ ca_cert_path }}/ca.crt"
   notify:
     - restart docker
 
 - name: create registry directories
-  file: path="{{ item }}" state=directory mode=0755
+  file:
+    path="{{ item }}"
+    state=directory mode=0755
   with_items:
     - /var/lib/registry/data
     - /var/lib/registry/certs
 
 - name: copy TLS files
-  copy: src="{{ infra_dir }}/files/{{ item }}" dest="/var/lib/registry/certs/{{ item }}"
+  copy:
+    src="{{ infra_dir }}/files/{{ item }}"
+    dest="/var/lib/registry/certs/{{ item }}"
   with_items:
     - ca.pem
     - registry.pem
