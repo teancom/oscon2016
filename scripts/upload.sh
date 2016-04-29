@@ -11,7 +11,7 @@ mc cp static/* $dest
 
 dir=$(mktemp -d)
 
-for i in infra ansible deploy; do
+for i in infra ansible deploy prometheus; do
   archive=$dir/$i.tar.gz
   tar czf $archive $i
   mc cp $archive $dest

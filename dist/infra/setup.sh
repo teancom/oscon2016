@@ -7,7 +7,7 @@ projectID=$(cat /etc/project-id)
 keyFile=$HOME/.ssh/id_rsa
 if [[ ! -f $keyFile ]]; then
   ssh-keygen -f $keyFile -t rsa -N ''
-  cat $HOME/.ssh/id_rsa.pub > $HOME/.ssh/authorized_keys
+  cat $HOME/.ssh/id_rsa.pub >> $HOME/.ssh/authorized_keys
   chmod 600 $HOME/.ssh/authorized_keys
 fi
 

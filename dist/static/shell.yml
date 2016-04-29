@@ -135,7 +135,6 @@
     - name: unarchive deploy config
       unarchive: src={{ workDir }}/deploy.tar.gz dest=/home/{{ user }} owner={{ user }} group={{ group }} copy=no
 
-
     - name: add default search domain
       lineinfile:
         dest=/etc/resolvconf/resolv.conf.d/base

@@ -20,6 +20,21 @@
   tags:
     - git
 
+- name: check for prometheus config
+  stat: path=/home/workshop/prometheus
+  register: prometheus_dir
+- name: download prometheus config
+  get_url:
+    url=https://s3.pifft.com/oscon2016/prometheus.tar.gz
+    dest=/tmp/prometheus.tar.gz
+    force=yes
+  when: prometheus_dir.stat.exists == False
+- name: unarchive prometheus config
+  unarchive: src=/tmp/prometheus.tar.gz dest=/home/workshop owner=workshop group=workshop copy=no
+  when: prometheus_dir.stat.exists == False
+  become: true
+  become_user: workshop
+
 - name: jenkins container
   docker:
     name: jenkins
@@ -32,6 +47,18 @@
     ports:
       - "8080:8080"
       - "50000:50000"
+
+- name: prometheus container
+  docker:
+    name: prometheus
+    image: prom/prometheus
+    command: -config.file=/etc/prometheus/prometheus.yml -storage.local.path=/prometheus -storage.local.memory-chunks=10000
+    pull: always
+    state: reloaded
+    volumes:
+      - "/home/workshop/prometheus:/etc/prometheus/"
+    ports:
+      - "9090:9090"
 
 - name: create registry cert dir
   file:
