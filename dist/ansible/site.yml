@@ -14,16 +14,26 @@
   become: true
   become_user: root
   vars:
+    consul_version: 0.6.4
     consul_is_ui: true
     consul_is_server: true
     consul_datacenter: "{{ project_id }}"
-    consul_bootstrap: "true"
+    consul_bootstrap_expect: 5
     consul_bind_address: "{{ ansible_default_ipv4['address'] }}"
     consul_encrypt: "X3zHsi7UKx1oufq9h51tTw=="
-    # consul_join_at_start: true
+    nginx_remove_default: true
+    consul_join_at_start: true
+    consul_servers:
+      - "app.{{ project_id }}.{{ project_domain }}"
+      - "shell.{{ project_id }}.{{ project_domain }}"
+      - "swarm-1.{{ project_id }}.{{ project_domain }}"
+      - "swarm-2.{{ project_id }}.{{ project_domain }}"
+      - "swarm-3.{{ project_id }}.{{ project_domain }}"
   roles:
     - savagegus.consul
     - node_exporter
+  tags:
+    - consul
 
 - hosts: swarms
   become: true
