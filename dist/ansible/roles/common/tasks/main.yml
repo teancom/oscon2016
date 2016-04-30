@@ -38,3 +38,15 @@
     line="domain {{ project_id }}.x.pifft.com"
     state=present
   notify: update resolvconf
+
+- name: use logspout for docker logs
+  docker:
+    name: logspout
+    image: bryanl/logspout-logstash
+    pull: always
+    state: reloaded
+    volumes:
+      - "/var/run/docker.sock:/var/run/docker.sock"
+    env:
+      ROUTE_URIS: "logstash://app.{{ project_id }}.x.pifft.com:5000"
+

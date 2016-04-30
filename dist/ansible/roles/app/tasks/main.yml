@@ -88,7 +88,7 @@
 - name: elk container
   docker:
     name: elk
-    image: "sebp/elk:es232_l232_k450"
+    image: "bryanl/oscon2016-elk"
     pull: always
     state: reloaded
     volumes:
@@ -97,6 +97,7 @@
       - "5601:5601"
       - "5001:5000"
       - "5044:5044"
+      - "5000:5000/udp"
 
 - name: create registry cert dir
   file:
