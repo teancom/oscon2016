@@ -1,0 +1,24 @@
+filebeat:
+  prospectors:
+    -
+      paths:
+       - /var/log/syslog
+       - /var/log/auth.log
+       - /var/log/consul
+      input_type: log
+      document_type: syslog
+  registry_file: /var/lib/filebeat/registry
+
+output:
+  logstash:
+    hosts: ["{{ log_destination }}"]
+    bulk_max_size: 1024
+
+    tls:
+      insecure: true
+      certificate_authorities: ["/etc/pki/tls/certs/logstash-forwarder.crt"]
+
+shipper:
+logging:
+  files:
+    rotateeverybytes: 10485760 # = 10MB

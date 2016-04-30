@@ -1,0 +1,3 @@
+---
+log_host: "app.{{ project_id }}.{{ project_domain }}"
+log_destination: "{{ hostvars[log_host].ansible_default_ipv4.address }}:5044"

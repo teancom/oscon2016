@@ -9,6 +9,12 @@
 - name: create docker repo
   apt_repository: repo='deb https://apt.dockerproject.org/repo ubuntu-trusty main' state=present
 
+- name: install elasticsearch repo keys
+  apt_key: url=https://packages.elastic.co/GPG-KEY-elasticsearch state=present
+
+- name: create elasticsearch repo
+  apt_repository: repo='deb https://packages.elastic.co/beats/apt stable main' state=present
+
 - name: install docker and friends
   apt:
     name="{{ item }}"
@@ -19,6 +25,7 @@
     - "linux-image-extra-{{ hostvars[inventory_hostname]['ansible_kernel'] }}"
     - python-pip
     - git
+    - filebeat
 
 - name: create docker group
   group: name=docker state=present
@@ -50,3 +57,31 @@
     env:
       ROUTE_URIS: "logstash://app.{{ project_id }}.x.pifft.com:5000"
 
+
+- name: create certs directory
+  file:
+    path="/etc/pki/tls/certs"
+    state=directory
+    owner=root
+    group=root
+    mode=0755
+
+- name: install logstash forwarder cert
+  template:
+    src="logstash-forwarder.crt"
+    dest="/etc/pki/tls/certs/logstash-forwarder.crt"
+    owner=root
+    group=root
+    mode=0644
+
+- name: install filebeat configuration
+  template:
+    src="filebeat.yml"
+    dest="/etc/filebeat/filebeat.yml"
+    owner=root
+    group=root
+    mode=0644
+  notify: restart filebeat
+
+- name: enable filebeat service
+  service: name=filebeat enabled=yes

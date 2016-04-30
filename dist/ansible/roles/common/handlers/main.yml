@@ -1,3 +1,6 @@
 ---
 - name: update resolvconf
   command: resolvconf -u
+
+- name: restart filebeat
+  service: name=filebeat state=restarted
