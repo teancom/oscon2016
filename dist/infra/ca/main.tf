@@ -10,11 +10,11 @@ variable "registry_cn" {
 # CA certificate
 #################################
 resource "tls_self_signed_cert" "ca" {
-  key_algorithm = "RSA"
+  key_algorithm   = "RSA"
   private_key_pem = "${tls_private_key.ca.private_key_pem}"
 
   subject {
-    common_name = "simple ca"
+    common_name  = "simple ca"
     organization = "${var.organization}"
   }
 
@@ -23,7 +23,7 @@ resource "tls_self_signed_cert" "ca" {
   allowed_uses = [
     "cert_signing",
     "key_encipherment",
-    "digital_signature"
+    "digital_signature",
   ]
 
   is_ca_certificate = true
@@ -31,7 +31,7 @@ resource "tls_self_signed_cert" "ca" {
 
 resource "tls_private_key" "ca" {
   algorithm = "RSA"
-  rsa_bits = "2048"
+  rsa_bits  = "2048"
 }
 
 #################################
@@ -40,9 +40,9 @@ resource "tls_private_key" "ca" {
 resource "tls_locally_signed_cert" "registry" {
   cert_request_pem = "${tls_cert_request.registry.cert_request_pem}"
 
-  ca_key_algorithm = "RSA"
+  ca_key_algorithm   = "RSA"
   ca_private_key_pem = "${tls_private_key.ca.private_key_pem}"
-  ca_cert_pem = "${tls_self_signed_cert.ca.cert_pem}"
+  ca_cert_pem        = "${tls_self_signed_cert.ca.cert_pem}"
 
   validity_period_hours = 8760
 
@@ -51,23 +51,23 @@ resource "tls_locally_signed_cert" "registry" {
     "key_encipherment",
     "digital_signature",
     "server_auth",
-    "client_auth"
+    "client_auth",
   ]
 }
 
 resource "tls_cert_request" "registry" {
-  key_algorithm = "RSA"
+  key_algorithm   = "RSA"
   private_key_pem = "${tls_private_key.registry.private_key_pem}"
 
   subject {
-    common_name = "${var.registry_cn}"
+    common_name  = "${var.registry_cn}"
     organization = "${var.organization}"
   }
 }
 
 resource "tls_private_key" "registry" {
   algorithm = "RSA"
-  rsa_bits = "2048"
+  rsa_bits  = "2048"
 }
 
 output "ca_pem" {

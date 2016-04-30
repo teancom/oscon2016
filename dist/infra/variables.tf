@@ -1,12 +1,18 @@
-variable "project" {}
-variable "domain" {}
-variable "public_key" {}
+variable "project" {
+}
+
+variable "domain" {
+}
+
+variable "public_key" {
+}
 
 variable "image" {
   default = "ubuntu-14-04-x64"
 }
 
-variable "region" {}
+variable "region" {
+}
 
 variable "user" {
   default = "workshop"
