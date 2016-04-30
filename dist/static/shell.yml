@@ -135,18 +135,8 @@
     - name: unarchive deploy config
       unarchive: src={{ workDir }}/deploy.tar.gz dest=/home/{{ user }} owner={{ user }} group={{ group }} copy=no
 
-    - name: add default search domain
-      lineinfile:
-        dest=/etc/resolvconf/resolv.conf.d/base
-        line="domain {{ project_id.stdout }}.x.pifft.com"
-        state=present
-      notify: update resolvconf
-
     - file: path=/home/{{ user }}/.shell-configured mode=0600 state=touch owner={{ user }} group={{ group }}
 
     - name: add git lol alias
       command: git config --global alias.lol "log --all --graph --pretty=format:'%Cred%h%Creset -%C(auto)%d%Creset %s %Cgreen(%cr) %C(bold blue)<%an>%Creset' --abbrev-commit --date=relative"
 
-  handlers:
-    - name: update resolvconf
-      command: resolvconf -u

@@ -68,6 +68,7 @@ resource "template_file" "user_data" {
   vars {
     public_key = "${var.public_key}"
     user       = "${var.user}"
+    encoded_id = "${base64encode(var.project)}"
   }
 }
 

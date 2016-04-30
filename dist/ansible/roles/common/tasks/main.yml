@@ -1,4 +1,7 @@
 ---
+- name: find project id
+  shell: cat /etc/project-id
+  register: project_id
 
 - name: install docker repo keys
   apt_key: keyserver=hkp://p80.pool.sks-keyservers.net:80 id=58118E89F3A912897C070ADBF76221572C52609D
@@ -7,7 +10,10 @@
   apt_repository: repo='deb https://apt.dockerproject.org/repo ubuntu-trusty main' state=present
 
 - name: install docker and friends
-  apt: name="{{ item }}" update_cache=yes cache_valid_time=3600
+  apt:
+    name="{{ item }}"
+    update_cache=yes
+    cache_valid_time=3600
   with_items:
     - docker-engine
     - "linux-image-extra-{{ hostvars[inventory_hostname]['ansible_kernel'] }}"
@@ -25,3 +31,10 @@
 
 - name: disable huge pages
   shell: echo never > /sys/kernel/mm/transparent_hugepage/enabled
+
+- name: add default search domain
+  lineinfile:
+    dest=/etc/resolvconf/resolv.conf.d/base
+    line="domain {{ project_id }}.x.pifft.com"
+    state=present
+  notify: update resolvconf

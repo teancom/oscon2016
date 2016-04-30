@@ -78,36 +78,25 @@
     ports:
       - "3000:3000"
 
-- name: create elasticsearch directories
+- name: create elasticsearch directory
   file:
-    path="/home/workshop/elasticsearch/{{ item }}"
+    path="/home/workshop/elasticsearch"
     state=directory mode=0755
   become: true
   become_user: workshop
-  with_items:
-    - log
-    - data
 
-- name: elasticsearch container
+- name: elk container
   docker:
-    name: elasticsearch
-    image: elasticsearch
+    name: elk
+    image: "sebp/elk:es232_l232_k450"
     pull: always
     state: reloaded
     volumes:
-      - "/home/workshop/elasticsearch:/usr/share/elasticsearch/data"
-    ports:
-      - "9200:9200"
-      - "9300:9300"
-
-- name: kibana container
-  docker:
-    name: kibana
-    image: kibana
+      - "/home/workshop/elasticsearch:/var/lib/elasticsearch"
     ports:
       - "5601:5601"
-    links:
-      - "elasticsearch:elasticsearch"
+      - "5001:5000"
+      - "5044:5044"
 
 - name: create registry cert dir
   file:
@@ -156,11 +145,3 @@
       REGISTRY_HTTP_TLS_CERTIFICATE: /certs/registry.pem
       REGISTRY_HTTP_TLS_KEY: /certs/registry_key.pem
 
-- name: create consul container
-  docker:
-    name: consul
-    image: progrium/consul
-    command: -server -bootstrap
-    state: started
-    ports:
-      - "8500:8500"
