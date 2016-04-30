@@ -92,7 +92,6 @@
   docker:
     name: elasticsearch
     image: elasticsearch
-    command:
     pull: always
     state: reloaded
     volumes:
@@ -101,6 +100,14 @@
       - "9200:9200"
       - "9300:9300"
 
+- name: kibana container
+  docker:
+    name: kibana
+    image: kibana
+    ports:
+      - "5601:5601"
+    links:
+      - "elasticsearch:elasticsearch"
 
 - name: create registry cert dir
   file:
