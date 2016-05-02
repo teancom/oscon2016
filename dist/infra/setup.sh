@@ -32,5 +32,5 @@ EOF
   echo "${tfVars}" > terraform.tfvars
 fi
 
-terraform get
-terraform apply
+terraform get -no-color
+terraform apply -no-color
