@@ -52,10 +52,11 @@
     image: bryanl/logspout-logstash
     pull: always
     state: reloaded
+    net: bridge
     volumes:
       - "/var/run/docker.sock:/var/run/docker.sock"
     env:
-      ROUTE_URIS: "logstash://app.{{ project_id }}.x.pifft.com:5000"
+      ROUTE_URIS: "logstash://app.{{ project_id }}.x.pifft.com:5002"
 
 
 - name: create certs directory

@@ -41,6 +41,7 @@
     image: "bryanl/jenkins-oscon2016"
     pull: always
     state: reloaded
+    net: bridge
     volumes:
       - "/var/jenkins_home:/var/jenkins_home"
       - "/var/run/docker.sock:/var/run/docker.sock"
@@ -55,6 +56,7 @@
     command: -config.file=/etc/prometheus/prometheus.yml -storage.local.path=/prometheus -storage.local.memory-chunks=10000
     pull: always
     state: reloaded
+    net: bridge
     volumes:
       - "/home/workshop/prometheus:/etc/prometheus/"
     ports:
@@ -72,6 +74,7 @@
     name: grafana
     image: grafana/grafana
     pull: always
+    net: bridge
     state: reloaded
     volumes:
       - "/home/workshop/grafana_db:/var/lib/grafana"
@@ -91,13 +94,14 @@
     image: "bryanl/oscon2016-elk"
     pull: always
     state: reloaded
+    net: bridge
     volumes:
       - "/home/workshop/elasticsearch:/var/lib/elasticsearch"
     ports:
       - "5601:5601"
       - "5001:5000"
+      - "5002:5001"
       - "5044:5044"
-      - "5000:5000/udp"
       - "9200:9200"
 
 - name: create registry cert dir
