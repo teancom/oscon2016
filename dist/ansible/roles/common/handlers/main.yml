@@ -4,3 +4,6 @@
 
 - name: restart filebeat
   service: name=filebeat state=restarted
+
+- name: restart docker
+  service: name=docker state=restarted

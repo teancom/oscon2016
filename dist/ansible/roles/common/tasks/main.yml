@@ -33,6 +33,16 @@
 - name: add workshop user to docker group
   user: name=workshop groups='docker'
 
+- name: configure docker
+  template:
+    src="docker-default"
+    dest="/etc/default/docker"
+    owner=root
+    group=root
+    mode=0644
+  notify:
+    - restart docker
+
 - name: install docker-py
   pip: name=docker-py state=latest
 
@@ -45,19 +55,6 @@
     line="domain {{ project_id }}.x.pifft.com"
     state=present
   notify: update resolvconf
-
-- name: use logspout for docker logs
-  docker:
-    name: logspout
-    image: bryanl/logspout-logstash
-    pull: always
-    state: reloaded
-    net: bridge
-    volumes:
-      - "/var/run/docker.sock:/var/run/docker.sock"
-    env:
-      ROUTE_URIS: "logstash://app.{{ project_id }}.x.pifft.com:5002"
-
 
 - name: create certs directory
   file:
