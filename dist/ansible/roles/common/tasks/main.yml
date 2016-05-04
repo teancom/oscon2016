@@ -1,4 +1,13 @@
 ---
+- name: set timezone to utc
+  copy: content='Etc/UTC'
+    dest=/etc/timezone
+    owner=root
+    group=root
+    mode=0644
+    backup=yes
+  notify:
+   - update timezone
 - name: find project id
   shell: cat /etc/project-id
   register: project_id
