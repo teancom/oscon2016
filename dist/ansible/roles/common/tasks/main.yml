@@ -8,6 +8,16 @@
     backup=yes
   notify:
    - update timezone
+
+- name: configure rsyslog
+  template:
+    src="rsyslog-default"
+    dest="/etc/default/rsyslog"
+    owner=root
+    group=root
+    mode=0644
+  notify:
+    - restart rsyslog
 - name: find project id
   shell: cat /etc/project-id
   register: project_id
