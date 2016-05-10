@@ -4,7 +4,7 @@
   lineinfile:
     dest=/etc/default/docker
     regexp=^#DOCKER_OPTS
-    line="DOCKER_OPTS=\"{{ docker_opts }}\""
+    line="DOCKER_OPTS=\"$DOCKER_OPTS {{ docker_opts }}\""
     backrefs=yes
   notify:
     - restart docker
