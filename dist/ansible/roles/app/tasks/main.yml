@@ -19,6 +19,14 @@
     group=workshop
     mode=0644
 
+- name: create jenkins after build script
+  template:
+    src=after_build.sh
+    dest=/var/jenkins_home/after_build.sh
+    owner=workshop
+    group=workshop
+    mode=0755
+
 - name: make docker more permissive
   file: path=/var/run/docker.sock mode="o+rw"
 
