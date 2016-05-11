@@ -11,6 +11,17 @@
 - name: create jenkins_home
   file: name=/var/jenkins_home state=directory mode=0755 owner=workshop group=workshop
 
+- name: create jenkins git config
+  template:
+    src=gitconfig
+    dest=/var/jenkins_home/.gitconfig
+    owner=workshop
+    group=workshop
+    mode=0644
+
+- name: make docker more permissive
+  file: path=/var/run/docker.sock mode="o+rw"
+
 - name: create omniscient repo
   git: repo=https://github.com/bryanl/omniscient.git
        dest=/home/git/omniscient.git
