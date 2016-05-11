@@ -1,3 +1,6 @@
 ---
 - name: restart docker
   service: name=docker state=restarted
+
+- name: update-ca-certificates
+  command: /usr/sbin/update-ca-certificates

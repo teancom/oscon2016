@@ -12,12 +12,19 @@
 - name: set up registry ca certs path
   file: path="{{ ca_cert_path }}" state=directory mode=0755
 
-- name: install registry ca certs
+- name: install registry ca certs for docker
   copy:
     src="/home/workshop/infra/files/ca.pem"
     dest="{{ ca_cert_path }}/ca.crt"
   notify:
     - restart docker
+
+- name: install registry ca certs for system
+  copy:
+    src="/home/workshop/infra/files/ca.pem"
+    dest="/usr/local/share/ca-certificates/workshop.crt"
+  notify:
+    - update-ca-certificates
 
 - name: run swarm manager
   docker:
