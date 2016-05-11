@@ -7,8 +7,8 @@ services:
     ports:
       - "8080"
     environment:
-      - OMNISCIENT_REDIS_ADDR="redis:6379"
-      - OMNISCIENT_HTTP_ADDR=":8080"
+      - OMNISCIENT_REDIS_ADDR=redis:6379
+      - OMNISCIENT_HTTP_ADDR=:8080
     depends_on:
       - redis
     networks:
