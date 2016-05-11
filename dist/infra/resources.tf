@@ -98,6 +98,10 @@ resource "null_resource" "ca" {
   }
 
   provisioner "local-exec" {
+    command = "sudo cp files/ca.pem /usr/local/share/ca-certificates/workshop.crt"
+  }
+
+  provisioner "local-exec" {
     command = "sudo dpkg-reconfigure ca-certificates"
   }
 }
