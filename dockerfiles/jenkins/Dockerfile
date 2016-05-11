@@ -12,9 +12,9 @@ RUN apt-get update \
       && usermod -a -G docker jenkins
 RUN echo "jenkins ALL=NOPASSWD: ALL" >> /etc/sudoers
 
-RUN wget -q https://storage.googleapis.com/golang/go1.6.linux-amd64.tar.gz
-RUN tar -C /usr/local -xzf go1.6.linux-amd64.tar.gz \
-      && rm go1.6.linux-amd64.tar.gz
+RUN wget -q https://storage.googleapis.com/golang/go1.6.2.linux-amd64.tar.gz
+RUN tar -C /usr/local -xzf go1.6.2.linux-amd64.tar.gz \
+      && rm go1.6.2.linux-amd64.tar.gz
 
 USER jenkins
 ENV PATH /usr/local/go/bin:$PATH
