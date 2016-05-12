@@ -3,6 +3,7 @@
 set -x
 
 projectID=$(cat /etc/project-id)
+region=$(cat /etc/project-region)
 
 keyFile=$HOME/.ssh/id_rsa
 if [[ ! -f $keyFile ]]; then
@@ -24,7 +25,7 @@ if [[ ! -f terraform.tfvars ]]; then
 do_token="$(cat /etc/digitalocean-token)"
 private_key="${keyFile}"
 ssh_fingerprint="${fingerprint}"
-region="nyc1"
+region="${region}"
 project="${projectID}"
 domain="x.pifft.com"
 public_key="${publicKey}"
