@@ -33,6 +33,7 @@
     command: manage --advertise={{ member_address}} {{ consul_address }}
     state: reloaded
     restart_policy: on-failure
+    net: bridge
     ports:
       - "4000:2375"
   when: inventory_hostname_short == "swarm-1"
@@ -56,3 +57,15 @@
     restart_policy: on-failure
     volumes:
       - "/var/run/docker.sock:/tmp/docker.sock"
+
+- name: run traefik
+  docker:
+    name: traefik
+    image: traefik
+    command: -l DEBUG -c /dev/null --docker --docker.endpoint tcp://swarm-1:4000 --docker-watch --web
+    pull: always
+    state: reloaded
+    net: bridge
+    ports:
+      - "8081:80"
+      - "8080:8080"
