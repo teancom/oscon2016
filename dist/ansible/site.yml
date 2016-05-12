@@ -5,6 +5,7 @@
     - common
   tags:
     - common
+    - node_exporter
 
 - hosts: apps
   become: true
@@ -13,6 +14,7 @@
     - app
   tags:
     - app
+
 
 - hosts: apps:swarms:shells
   become: true
@@ -35,7 +37,6 @@
       - "swarm-3.{{ project_id }}.{{ project_domain }}"
   roles:
     - savagegus.consul
-    - node_exporter
   tags:
     - consul
 
