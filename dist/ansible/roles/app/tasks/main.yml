@@ -11,6 +11,9 @@
 - name: create jenkins_home
   file: name=/var/jenkins_home state=directory mode=0755 owner=workshop group=workshop
 
+- name: create jenkins ssh directory
+  file: name=/var/jenkins_home/.ssh state=directory mode=0700 owner=workshop group=workshop
+
 - name: create jenkins git config
   template:
     src=gitconfig
@@ -26,6 +29,14 @@
     owner=workshop
     group=workshop
     mode=0755
+
+- name: copy generated ssh key to jenkins
+  copy:
+    src="/home/workshop/.ssh/id_rsa"
+    dest="/var/jenkins_home/.ssh/id_rsa"
+    owner=workshop
+    group=workshop
+    mode=0600
 
 - name: make docker more permissive
   file: path=/var/run/docker.sock mode="o+rw"
