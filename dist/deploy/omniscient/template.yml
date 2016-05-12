@@ -12,7 +12,10 @@ services:
     depends_on:
       - redis
     networks:
-      - back-end
+      - front-end
+    labels:
+      - "traefik.backend=omniscient"
+      - "traefik.frontend.rule=Host:omniscient.docker.localhost"
 
   redis:
     image: redis
@@ -23,12 +26,12 @@ services:
     volumes:
       - redis-data:/data
     networks:
-      - back-end
+      - front-end
 
 volumes:
   redis-data:
     driver: local
 
 networks:
-  back-end:
+  front-end:
     driver: overlay
