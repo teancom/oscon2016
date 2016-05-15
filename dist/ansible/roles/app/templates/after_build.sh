@@ -4,7 +4,7 @@
 
 set -e
 
-webHookURL="https://devconfbot.ngrok.io/webhook"
+webHookURL=$(cat /etc/confbot-webhook-url)
 id=$(cat /etc/project-id)
 
 json=$(cat <<eof

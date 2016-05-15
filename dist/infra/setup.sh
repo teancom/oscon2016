@@ -4,6 +4,7 @@ set -x
 
 projectID=$(cat /etc/project-id)
 region=$(cat /etc/project-region)
+domain=$(cat /etc/project-domain)
 
 keyFile=$HOME/.ssh/id_rsa
 if [[ ! -f $keyFile ]]; then
@@ -27,8 +28,9 @@ private_key="${keyFile}"
 ssh_fingerprint="${fingerprint}"
 region="${region}"
 project="${projectID}"
-domain="x.pifft.com"
+domain="${domain}"
 public_key="${publicKey}"
+confbot_webhook_url="$(cat /etc/confbot-webhook-url)"
 EOF
   echo "${tfVars}" > terraform.tfvars
 fi

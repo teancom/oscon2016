@@ -1,7 +1,8 @@
 #!/usr/bin/env bash
 
+domain=$(cat /etc/project-domain)
 id=$(cat /etc/project-id)
-esURL="http://app.${id}.x.pifft.com:9200"
+esURL="http://app.${id}.${domain}:9200"
 name=beats-dashboards-1.1.0
 
 curl -sSL ${esURL}/_template | grep '{}'

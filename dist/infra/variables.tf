@@ -1,6 +1,9 @@
 variable "project" {
 }
 
+variable "confbot_webhook_url" {
+}
+
 variable "domain" {
 }
 

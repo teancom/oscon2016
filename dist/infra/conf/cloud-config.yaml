@@ -11,6 +11,11 @@ write_files:
     owner: root:root
     path: /etc/project-id
     permissions: '0644'
+  - encoding: b64
+    content: ${encoded_confbot_webhook_url}
+    owner: root:root
+    path: /etc/confbof-webhook-url
+    permissions: '0644'
 package_update: true
 apt_sources:
   - source: "ppa:gluster/glusterfs-3.5"

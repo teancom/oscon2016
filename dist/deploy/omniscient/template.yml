@@ -3,7 +3,7 @@ version: '2'
 
 services:
   web:
-    image: 'app.${PROJECT_ID}.x.pifft.com:5000/workshop/omniscient:latest'
+    image: 'app.${PROJECT_ID}.${PROJECT_DOMAIN}:5000/workshop/omniscient:latest'
     ports:
       - "8080"
     environment:

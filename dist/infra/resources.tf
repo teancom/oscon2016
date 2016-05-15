@@ -69,6 +69,7 @@ resource "template_file" "user_data" {
     public_key = "${var.public_key}"
     user       = "${var.user}"
     encoded_id = "${base64encode(var.project)}"
+    encoded_confbot_webhook_url = "${base64encode(var.confbot_webhook_url)}"
   }
 }
 

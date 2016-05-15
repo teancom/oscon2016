@@ -7,7 +7,7 @@ set -e
 workDir=/tmp/.install
 playbook=${workDir}/bootstrap.yml
 user=workshop
-webHookURL="https://devconfbot.ngrok.io/webhook"
+webHookURL=$(cat /etc/confbot-webhook-url)
 id=$(cat /etc/project-id)
 
 mkdir -p $workDir
