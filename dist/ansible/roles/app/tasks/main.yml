@@ -11,6 +11,9 @@
 - name: create jenkins_home
   file: name=/var/jenkins_home state=directory mode=0755 owner=workshop group=workshop
 
+- name: copy confbot-webhook-url
+  copy: src=/etc/confbot-webhook-url dest=/var/jenkins_home/confbot-webhook-url owner=workshop group=workshop
+
 - name: create jenkins ssh directory
   file: name=/var/jenkins_home/.ssh state=directory mode=0700 owner=workshop group=workshop
 

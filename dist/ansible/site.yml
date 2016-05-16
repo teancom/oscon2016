@@ -3,9 +3,9 @@
   become_user: root
   roles:
     - common
+    - node_exporter
   tags:
     - common
-    - node_exporter
 
 - hosts: apps
   become: true

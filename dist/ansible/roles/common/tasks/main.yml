@@ -71,7 +71,7 @@
 - name: add default search domain
   lineinfile:
     dest=/etc/resolvconf/resolv.conf.d/base
-    line="domain {{ project_id }}.{{ project_id }}"
+    line="domain {{ project_id }}.{{ project_domain }}"
     state=present
   notify: update resolvconf
 

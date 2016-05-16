@@ -6,9 +6,9 @@
     command: -collector.procfs /host/proc -collector.sysfs /host/proc -collector.filesystem.ignored-mount-points "^/(sys|proc|dev|host|etc)($|/)"
     pull: always
     state: reloaded
-    net: bridge
+    net: host
     volumes:
       - "/proc:/host/proc"
       - "/sys:/host/sys"
     ports:
-      - "9100:9100"
+      - "9100"

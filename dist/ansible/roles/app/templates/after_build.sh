@@ -4,7 +4,7 @@
 
 set -e
 
-webHookURL=$(cat /etc/confbot-webhook-url)
+webHookURL=$(cat /var/jenkins_home/confbot-webhook-url)
 id=$(cat /etc/project-id)
 
 json=$(cat <<eof
