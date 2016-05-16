@@ -45,3 +45,9 @@
   become_user: root
   roles:
     - swarm
+
+- hosts: apps:swarms:shells
+  become: true
+  become_user: root
+  roles:
+    - node_exporter

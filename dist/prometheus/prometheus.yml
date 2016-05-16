@@ -3,4 +3,4 @@ scrape_configs:
   - job_name: 'prometheus'
     scrape_interval: 3s
     target_groups:
-      - targets: ['app:9090', 'swarm-1:9090', 'swarm-2:9090', 'swarm-3:9090', 'shell:9090']
+      - targets: ['app:9100', 'swarm-1:9100', 'swarm-2:9100', 'swarm-3:9100', 'shell:9100']
