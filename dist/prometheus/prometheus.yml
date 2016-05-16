@@ -1,6 +1,6 @@
 scrape_configs:
-  # Scrape Prometheus itself every 5 seconds.
+  # Scrape Prometheus itself every 3 seconds.
   - job_name: 'prometheus'
-    scrape_interval: 5s
+    scrape_interval: 3s
     target_groups:
-      - targets: ['localhost:9090']
+      - targets: ['app:9090', 'swarm-1:9090', 'swarm-2:9090', 'swarm-3:9090', 'shell:9090']

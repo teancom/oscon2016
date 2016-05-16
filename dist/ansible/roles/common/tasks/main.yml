@@ -45,6 +45,7 @@
     - python-pip
     - git
     - filebeat
+    - stress
 
 - name: create docker group
   group: name=docker state=present
